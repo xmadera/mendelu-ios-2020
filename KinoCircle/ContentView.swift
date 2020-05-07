@@ -10,22 +10,23 @@ import SwiftUI
 
 struct ContentView: View {
     @State var selected = "Movies & Shows"
-
+    
     var body: some View {
         NavigationView {
             TabView(selection: $selected) {
                 MoviesShowsView()
-                .tabItem({
+                    .tabItem({
                         selected == "Movies & Shows" ? Image(systemName: "film.fill") : Image(systemName: "film")
                         Text("Movies & Shows")
-                }).tag("Movies & Shows")
-                    FavoritesView()
+                    }).tag("Movies & Shows")
+                FavoritesView()
                     .tabItem({
                         selected == "Favorites" ? Image(systemName: "star.fill") : Image(systemName: "star")
                         Text("Favorites")
-                }).tag("Favorites")
-            }.navigationBarTitle(Text(self.selected), displayMode: .inline)
-             .accentColor(Color.black)
+                    }).tag("Favorites")
+            }
+            .navigationBarTitle(Text(self.selected), displayMode: .inline)
+            .accentColor(Color.blue)
         }
     }
 }
