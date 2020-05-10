@@ -44,14 +44,11 @@ struct SearchBar: UIViewRepresentable {
 }
 
 struct MoviesShowsView: View {
-    @State var searchText = ""
     @State private var selectorIndex = 0
     @State private var tabs = ["Movies","Shows"]
     
     var body: some View {
         VStack {
-            SearchBar(text: $searchText)
-                .padding(0.0)
             Picker("Numbers", selection: $selectorIndex) {
                 ForEach(0 ..< tabs.count) { index in
                     Text(self.tabs[index]).tag(index)
@@ -59,6 +56,14 @@ struct MoviesShowsView: View {
             }
             .padding(.top, -8.0)
             .pickerStyle(SegmentedPickerStyle())
+            
+            if selectorIndex == 0 {
+                MoviesShowsMoviesView()
+            }
+            if selectorIndex == 1 {
+                MoviesShowsShowsView()
+            }
+            
             Spacer()
         }
         .padding(.horizontal)

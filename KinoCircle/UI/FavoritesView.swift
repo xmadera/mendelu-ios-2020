@@ -18,9 +18,9 @@ struct FavoritesView: View {
                 ForEach(0 ..< tabs.count) { index in
                     Text(self.tabs[index]).tag(index)
                 }
-                å}
-                .padding(.top)
-                .pickerStyle(SegmentedPickerStyle())
+            }
+            .padding(.top)
+            .pickerStyle(SegmentedPickerStyle())
             Spacer()
         }.padding(.horizontal)            .navigationBarTitle("Favorites", displayMode: .inline)
     }
