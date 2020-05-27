@@ -54,7 +54,7 @@ struct MoviesShowsView: View {
                     Text(self.tabs[index]).tag(index)
                 }
             }
-            .padding(.top, -8.0)
+            .padding(.top)
             .pickerStyle(SegmentedPickerStyle())
             
             if selectorIndex == 0 {

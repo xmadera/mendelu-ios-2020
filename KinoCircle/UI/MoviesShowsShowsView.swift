@@ -9,8 +9,23 @@
 import SwiftUI
 
 struct MoviesShowsShowsView: View {
+    @State var searchText = ""
+    var searchedTag = "series"
+    @ObservedObject private var movieListVM = MovieListViewModel()
+    
     var body: some View {
-        Text("Shows")
+        VStack {
+            SearchBar(text: $searchText)
+                .padding(0.0)
+            Button(action: { self.movieListVM.loadMovies(paramTitle: self.searchText, tag: self.searchedTag) }) {
+                Text("Search")
+            }
+            List(self.movieListVM.movies, id: \.imdbID) { movie in
+                NavigationLink(destination: MoviesShowsDetailView(imdbID: movie.imdbID, moviePoster: movie.poster)) {
+                    Text(movie.title)
+                }
+            }
+        }
     }
 }
 
