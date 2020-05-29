@@ -15,14 +15,14 @@ class MovieListViewModel: ObservableObject {
     func loadMovies(paramTitle: String, tag: String) {
         MainWebservice().getMovies(paramTitle: paramTitle, tag: tag) { response in
             
+            self.error = nil
+            self.movies = []
             if let movies = response?.Search {
                 self.movies = movies.map(MovieViewModel.init)
-            }
-            
-            if let error = response?.Error {
-                self.error = error
             } else {
-                self.error = ""
+                if let error = response?.Error {
+                    self.error = error
+                }
             }
         }
     }

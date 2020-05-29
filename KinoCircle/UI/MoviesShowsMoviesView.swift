@@ -13,53 +13,60 @@ struct MoviesShowsMoviesView: View {
     @State var searchText = ""
     var searchedTag = "movie"
     @ObservedObject private var movieListVM = MovieListViewModel()
+    @State private var showingAlert = false
+    
+    init() {
+        UITableView.appearance().showsVerticalScrollIndicator = false
+    }
     
     var body: some View {
         VStack {
             SearchBar(text: $searchText)
                 .padding(0.0)
+            
             Button(action: {
                 self.movieListVM.loadMovies(paramTitle: self.searchText, tag: self.searchedTag)
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    if (self.movieListVM.error) != nil {
+                        self.showingAlert = true
+                    }
+                }
             }) {
                 Text("Search")
-            } .disabled(self.searchText.isEmpty)
-            Text(self.error())
-                .foregroundColor(Color.red)
-                .padding(.vertical)
-            GeometryReader { metrics in
-                List(self.movieListVM.movies, id: \.imdbID) { movie in
-                    NavigationLink(destination: MoviesShowsDetailView(imdbID: movie.imdbID, moviePoster: movie.poster)) {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                .fill(Color.white)
-                                .shadow(color: .gray, radius: 2)
-                                .frame(width: metrics.size.width * 0.9, height: metrics.size.height * 0.3)
-                            GeometryReader { metrics in
-                                HStack {
-                                    VStack(alignment: .leading) {
-                                        URLImage(self.returnImageURL(poster: movie.poster), delay: 0.25, content:  {
-                                            $0.image
-                                                .resizable()
-                                                .frame(width: metrics.size.width * 0.3, height: metrics.size.height * 0.6, alignment: .leading)
-                                        })
-                                    } .frame(width: metrics.size.width * 0.4, height: metrics.size.height)
-                                    VStack(alignment: .leading) {
-                                        Text(movie.title)
-                                        Text(movie.year)
-                                    } .frame(width: metrics.size.width * 0.5, height: metrics.size.height)
+            }
+            .disabled(self.searchText.isEmpty)
+            .alert(isPresented: $showingAlert) {
+                Alert(title: Text(self.error() ?? "Unknown error"), message: Text("Try specifying your seach"), dismissButton: .default(Text("Close")))
+            }
+            
+            VStack {
+                List {
+                    ForEach(self.movieListVM.movies, id: \.imdbID) { movie in
+                        NavigationLink(destination: MoviesShowsDetailView(imdbID: movie.imdbID, moviePoster: movie.poster)) {
+                            HStack(alignment: .top) {
+                                URLImage(self.returnImageURL(poster: movie.poster), delay: 0.25, content:  {
+                                    $0.image
+                                        .resizable()
+                                        .frame(width: 100, height: 100)
+                                })
+                                VStack(alignment: .leading) {
+                                    Text(movie.title).font(.headline).padding(.bottom, 4)
+                                    Text(movie.year).font(.subheadline)
                                 }
-                            }
+                            }.frame(height: 100)
                         }
                     }
-                }.frame(width: metrics.size.width, height: metrics.size.height, alignment: .center)
-            }        }
+                }
+            }
+        }
     }
     
-    func error() -> String {
+    func error() -> String? {
         if let myError = movieListVM.error {
             return myError
         }
-        return ""
+        return nil
     }
     
     func returnImageURL(poster: String) -> URL {

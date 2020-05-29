@@ -8,24 +8,38 @@
 
 import SwiftUI
 
+enum TabBar {
+    case movies_and_shows
+    case favourites
+    
+    var tabBarTitle: String {
+        switch self {
+        case .movies_and_shows:
+            return "Movies & Shows"
+        case .favourites:
+            return "Favorites"
+        }
+    }
+}
+
 struct ContentView: View {
-    @State var selected = "Movies & Shows"
+    @State private var selected = TabBar.movies_and_shows
     
     var body: some View {
         NavigationView {
             TabView(selection: $selected) {
                 MoviesShowsView()
                     .tabItem({
-                        selected == "Movies & Shows" ? Image(systemName: "film.fill") : Image(systemName: "film")
-                        Text("Movies & Shows")
-                    }).tag("Movies & Shows")
+                        selected == TabBar.movies_and_shows ? Image(systemName: "film.fill") : Image(systemName: "film")
+                        Text(TabBar.movies_and_shows.tabBarTitle)
+                    }).tag(TabBar.movies_and_shows)
                 FavoritesView()
                     .tabItem({
-                        selected == "Favorites" ? Image(systemName: "star.fill") : Image(systemName: "star")
-                        Text("Favorites")
-                    }).tag("Favorites")
+                        selected == TabBar.favourites ? Image(systemName: "star.fill") : Image(systemName: "star")
+                        Text(TabBar.favourites.tabBarTitle)
+                    }).tag(TabBar.favourites)
             }
-            .navigationBarTitle(Text(self.selected), displayMode: .inline)
+            .navigationBarTitle(Text(selected.tabBarTitle), displayMode: .inline)
             .accentColor(Color.blue)
         }
     }
