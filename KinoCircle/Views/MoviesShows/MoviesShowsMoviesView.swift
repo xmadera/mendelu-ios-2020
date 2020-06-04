@@ -37,15 +37,15 @@ struct MoviesShowsMoviesView: View {
             }
             .disabled(self.searchText.isEmpty)
             .alert(isPresented: $showingAlert) {
-                Alert(title: Text(self.error() ?? "Unknown error"), message: Text("Try specifying your seach"), dismissButton: .default(Text("Close")))
+                Alert(title: Text(self.movieListVM.getError() ?? "Unknown error"), message: Text("Try specifying your seach"), dismissButton: .default(Text("Close")))
             }
             
             VStack {
                 List {
                     ForEach(self.movieListVM.movies, id: \.imdbID) { movie in
-                        NavigationLink(destination: MoviesShowsDetailView(movie: movie)) {
+                        NavigationLink(destination: MoviesDetailView(movie: movie)) {
                             HStack(alignment: .top) {
-                                URLImage(self.returnImageURL(poster: movie.poster), delay: 0.25, content:  {
+                                URLImage(movie.poster.getImageUrl, delay: 0.25, content:  {
                                     $0.image
                                         .resizable()
                                         .frame(width: 100, height: 100)
@@ -60,17 +60,6 @@ struct MoviesShowsMoviesView: View {
                 }
             }
         }
-    }
-    
-    func error() -> String? {
-        if let myError = movieListVM.error {
-            return myError
-        }
-        return nil
-    }
-    
-    func returnImageURL(poster: String) -> URL {
-        return URL(string: poster)!
     }
 }
 

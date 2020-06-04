@@ -26,6 +26,13 @@ class MovieListViewModel: ObservableObject {
             }
         }
     }
+    
+    func getError() -> String? {
+        if let myError = error {
+            return myError
+        }
+        return nil
+    }
 }
 
 struct MovieViewModel {
