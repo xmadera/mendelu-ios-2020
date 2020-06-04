@@ -11,8 +11,8 @@ import URLImage
 
 struct MoviesShowsDetailView: View {
     
-    @State var imdbID: String
-    @State var moviePoster: String
+    @Environment(\.managedObjectContext) var viewContext
+    @State var movie: MovieViewModel
     @State private var showingActionSheet = false
     @ObservedObject private var movieDetailVM = MovieDetailViewModel()
     
@@ -46,19 +46,19 @@ struct MoviesShowsDetailView: View {
                                 }
                         )
                             .actionSheet(isPresented: self.$showingActionSheet) {
-                                ActionSheet(title: Text("Options"), buttons: [.default(Text("Add to favorites"), action: {}), .cancel()])
+                                ActionSheet(title: Text("Options"), buttons: [.default(Text("Add to favorites"), action: { MovieCD.create(context: self.viewContext, movie: self.movie) }), .cancel()])
                         }
                     }                .frame(width: metrics.size.width, height: metrics.size.height / 2, alignment: .top)
                     
                 }.onAppear{
-                    self.movieDetailVM.loadMovie(imdbID: self.imdbID)
+                    self.movieDetailVM.loadMovie(imdbID: self.movie.imdbID)
                 }
             }
         }
     }
     
     func returnImageURL() -> URL {
-        return URL(string: moviePoster)!
+        return URL(string: self.movie.poster)!
     }
 }
 

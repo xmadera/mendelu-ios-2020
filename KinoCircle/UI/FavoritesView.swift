@@ -7,22 +7,40 @@
 //
 
 import SwiftUI
+import URLImage
 
 struct FavoritesView: View {
     @State private var selectorIndex = 0
     @State private var tabs = ["Movies","Shows"]
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \MovieCD.title, ascending: true)],
+        animation: .default)
+    var movies: FetchedResults<MovieCD>
+    
+    @Environment(\.managedObjectContext)
+    var viewContext
     
     var body: some View {
-        VStack {
-            Picker("Numbers", selection: $selectorIndex) {
-                ForEach(0 ..< tabs.count) { index in
-                    Text(self.tabs[index]).tag(index)
+                    VStack {
+            List {
+                ForEach(self.movies, id: \.imdbID) { movie in
+                        HStack(alignment: .top) {
+                            URLImage(self.returnImageURL(poster: movie.poster!), delay: 0.25, content:  {
+                                $0.image
+                                    .resizable()
+                                    .frame(width: 100, height: 100)
+                            })
+                            VStack(alignment: .leading) {
+                                Text(movie.title!).font(.headline).padding(.bottom, 4)
+                                Text(movie.year!).font(.subheadline)
+                            }
+                        }.frame(height: 100)
                 }
             }
-            .padding(.top)
-            .pickerStyle(SegmentedPickerStyle())
-            Spacer()
-        }.padding(.horizontal)            .navigationBarTitle("Favorites", displayMode: .inline)
+        }
+    }
+    func returnImageURL(poster: String) -> URL {
+        return URL(string: poster)!
     }
 }
 

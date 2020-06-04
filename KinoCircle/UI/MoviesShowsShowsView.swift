@@ -21,7 +21,7 @@ struct MoviesShowsShowsView: View {
                 Text("Search")
             }
             List(self.movieListVM.movies, id: \.imdbID) { movie in
-                NavigationLink(destination: MoviesShowsDetailView(imdbID: movie.imdbID, moviePoster: movie.poster)) {
+                NavigationLink(destination: MoviesShowsDetailView(movie: movie)) {
                     Text(movie.title)
                 }
             }

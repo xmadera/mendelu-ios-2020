@@ -43,7 +43,7 @@ struct MoviesShowsMoviesView: View {
             VStack {
                 List {
                     ForEach(self.movieListVM.movies, id: \.imdbID) { movie in
-                        NavigationLink(destination: MoviesShowsDetailView(imdbID: movie.imdbID, moviePoster: movie.poster)) {
+                        NavigationLink(destination: MoviesShowsDetailView(movie: movie)) {
                             HStack(alignment: .top) {
                                 URLImage(self.returnImageURL(poster: movie.poster), delay: 0.25, content:  {
                                     $0.image
