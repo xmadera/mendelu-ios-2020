@@ -10,31 +10,17 @@ import SwiftUI
 import URLImage
 
 struct FavoritesShowsView: View {
-    
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \MovieCD.title, ascending: true)],
-        animation: .default)
-    var movies: FetchedResults<MovieCD>
-    
     @Environment(\.managedObjectContext)
     var viewContext
+    @ObservedObject private var FavoritesList = FavoritesListViewModel()
     
     var body: some View {
         VStack {
             List {
-                ForEach(self.movies, id: \.imdbID) { movie in
+                ForEach(self.FavoritesList.movies, id: \.imdbID) { movie in
                     HStack(alignment: .top) {
-                        URLImage(movie.poster?.getImageUrl ?? URL(string: "")!, delay: 0.25, content:  {
-                            $0.image
-                                .resizable()
-                                .frame(width: 100, height: 100)
-                        })
-                        VStack(alignment: .leading) {
-                            Text(movie.title!).font(.headline).padding(.bottom, 4)
-                            Text(movie.year!).font(.subheadline)
-                        }
-                    }.frame(height: 100)
-                        
+                        MovieCDRow(movie: movie.movie)
+                    }
                 }
             }
         }

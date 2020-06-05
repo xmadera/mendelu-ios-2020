@@ -10,9 +10,9 @@ import SwiftUI
 import URLImage
 
 
-struct MoviesDetailView: View {
+struct MoviesDetailCDView: View {
     @Environment(\.managedObjectContext) var viewContext
-    @State var movie: MovieViewModel
+    @State var movie: MovieCD
     @State private var showingActionSheet = false
     @ObservedObject private var movieDetailVM = MovieDetailViewModel()
     
@@ -21,7 +21,7 @@ struct MoviesDetailView: View {
         VStack {
             VStack(alignment: .center) {
                 ZStack{
-                    URLImage(self.movie.poster.getImageUrl, delay: 0.25, content:  {
+                    URLImage(self.movie.poster?.getImageUrl ?? URL(string: "")!, delay: 0.25, content:  {
                         $0.image
                             .resizable()
                             .aspectRatio(contentMode: .fill)
@@ -97,21 +97,21 @@ struct MoviesDetailView: View {
                 Text("Ratings")
                     .padding(.vertical)
                 
-//                HStack {
-//                    ForEach(self.movieDetailVM.movie.ratings) { rating in
-//                        VStack {
-//                            Text("\(rating.Source)")
-//                            Text("\(rating.Value)")
-//                        }
-//                    }
-//                }
+                //                HStack {
+                //                    ForEach(self.movieDetailVM.movie.ratings) { rating in
+                //                        VStack {
+                //                            Text("\(rating.Source)")
+                //                            Text("\(rating.Value)")
+                //                        }
+                //                    }
+                //                }
                 
             }.padding()
                 .actionSheet(isPresented: self.$showingActionSheet) {
-                    ActionSheet(title: Text("Options"), buttons: [.default(Text("Add to favorites"), action: { MovieCD.create(context: self.viewContext, movie: self.movie.movie) }), .cancel()])
+                    ActionSheet(title: Text("Options"), buttons: [.default(Text("Remove from favorites"), action: { }), .cancel()])
             }
-            .onAppear{
-                self.movieDetailVM.loadMovie(imdbID: self.movie.imdbID)
+        .onAppear{
+            self.movieDetailVM.loadMovie(imdbID: self.movie.imdbID ?? "")
             }
             
             
@@ -123,7 +123,7 @@ struct MoviesDetailView: View {
     }
 }
 
-struct MoviesDetailView_Previews: PreviewProvider {
+struct MoviesDetailCDView_Previews: PreviewProvider {
     static var previews: some View {
         /*@START_MENU_TOKEN@*/Text("Hello, World!")/*@END_MENU_TOKEN@*/
     }

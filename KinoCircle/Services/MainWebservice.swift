@@ -15,7 +15,7 @@ class MainWebservice {
         var myUrl = "https://movie-database-imdb-alternative.p.rapidapi.com/?r=json"
                 
         myUrl += "&type=" + tag
-        myUrl += "&s=" + paramTitle
+        myUrl += "&s=" + paramTitle.trimmingCharacters(in: .whitespacesAndNewlines)
                         
         guard let url = URL(string: myUrl) else { fatalError("Invalid API URL") }
         

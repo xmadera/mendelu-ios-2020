@@ -42,6 +42,7 @@ struct ContentView: View {
             .navigationBarTitle(Text(selected.tabBarTitle), displayMode: .inline)
             .accentColor(Color.blue)
         }
+        
     }
 }
 

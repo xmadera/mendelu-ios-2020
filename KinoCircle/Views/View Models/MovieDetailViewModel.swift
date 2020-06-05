@@ -92,7 +92,7 @@ struct DetailViewModel {
     }
     
     var award: String {
-        return self.movie.Award!
+        return self.movie.Award ?? "No award"
     }
     
     var ratings: [Rating] {

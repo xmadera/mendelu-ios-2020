@@ -7,22 +7,38 @@
 //
 
 import SwiftUI
+import URLImage
 
 struct MoviesShowsShowsView: View {
     @State var searchText = ""
     var searchedTag = "series"
     @ObservedObject private var movieListVM = MovieListViewModel()
+    @State private var showingAlert = false
     
     var body: some View {
         VStack {
             SearchBar(text: $searchText)
                 .padding(0.0)
-            Button(action: { self.movieListVM.loadMovies(paramTitle: self.searchText, tag: self.searchedTag) }) {
+            Button(action: {
+                self.movieListVM.loadMovies(paramTitle: self.searchText, tag: self.searchedTag)
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    if (self.movieListVM.error) != nil {
+                        self.showingAlert = true
+                    }
+                }
+            }) {
                 Text("Search")
             }
-            List(self.movieListVM.movies, id: \.imdbID) { movie in
-                NavigationLink(destination: MoviesDetailView(movie: movie)) {
-                    Text(movie.title)
+            .disabled(self.searchText.isEmpty)
+            .alert(isPresented: $showingAlert) {
+                Alert(title: Text(self.movieListVM.getError() ?? "Unknown error"), message: Text("Try specifying your seach"), dismissButton: .default(Text("Close")))
+            }
+            VStack {
+                List {
+                    ForEach(self.movieListVM.movies, id: \.imdbID) { movie in
+                        MovieRow(movie: movie)
+                    }
                 }
             }
         }

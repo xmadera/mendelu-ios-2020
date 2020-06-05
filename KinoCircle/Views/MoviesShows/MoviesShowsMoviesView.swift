@@ -13,6 +13,7 @@ struct MoviesShowsMoviesView: View {
     @State var searchText = ""
     var searchedTag = "movie"
     @ObservedObject private var movieListVM = MovieListViewModel()
+    @ObservedObject private var favoritesListVM = FavoritesListViewModel()
     @State private var showingAlert = false
     
     init() {
@@ -23,7 +24,6 @@ struct MoviesShowsMoviesView: View {
         VStack {
             SearchBar(text: $searchText)
                 .padding(0.0)
-            
             Button(action: {
                 self.movieListVM.loadMovies(paramTitle: self.searchText, tag: self.searchedTag)
                 
@@ -43,23 +43,19 @@ struct MoviesShowsMoviesView: View {
             VStack {
                 List {
                     ForEach(self.movieListVM.movies, id: \.imdbID) { movie in
-                        NavigationLink(destination: MoviesDetailView(movie: movie)) {
-                            HStack(alignment: .top) {
-                                URLImage(movie.poster.getImageUrl, delay: 0.25, content:  {
-                                    $0.image
-                                        .resizable()
-                                        .frame(width: 100, height: 100)
-                                })
-                                VStack(alignment: .leading) {
-                                    Text(movie.title).font(.headline).padding(.bottom, 4)
-                                    Text(movie.year).font(.subheadline)
-                                }
-                            }.frame(height: 100)
+                        Group {
+                            if !self.isInCoreData(id: movie.imdbID) {
+                                MovieRow(movie: movie)
+                            }
                         }
                     }
                 }
             }
         }
+    }
+    
+    func isInCoreData(id: String) -> Bool {
+        if self.favoritesListVM.movies.contains(where: { $0.imdbID == id }) { return true } else { return false }
     }
 }
 

@@ -10,14 +10,14 @@ import SwiftUI
 import CoreData
 
 extension MovieCD: Identifiable {
-    
-    static func create(context: NSManagedObjectContext, movie: MovieViewModel){
+        
+    static func create(context: NSManagedObjectContext, movie: Movie){
         let newMovieCD = MovieCD(context: context)
         newMovieCD.imdbID = movie.imdbID
-        newMovieCD.title = movie.title
-        newMovieCD.type = movie.type
-        newMovieCD.poster = movie.poster
-        newMovieCD.year = movie.year
+        newMovieCD.title = movie.Title
+        newMovieCD.type = movie.Type
+        newMovieCD.poster = movie.Poster
+        newMovieCD.year = movie.Year
         do{
             try context.save()
         } catch {
