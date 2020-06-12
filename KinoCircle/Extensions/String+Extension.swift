@@ -9,9 +9,9 @@
 import Foundation
 
 extension String {
-    var getImageUrl: URL {
+    var getImageUrl: URL? {
         let poster = self
-        return URL(string: poster)!
+        return URL(string: poster) ?? URL(string: "https://www.tibs.org.tw/images/default.jpg")!
     }
 }
 

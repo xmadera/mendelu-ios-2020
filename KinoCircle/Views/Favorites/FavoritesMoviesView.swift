@@ -10,9 +10,8 @@ import SwiftUI
 import URLImage
 
 struct FavoritesMoviesView: View {
-    @Environment(\.managedObjectContext)
-    var viewContext
     @ObservedObject private var FavoritesList = FavoritesListViewModel()
+    @Environment(\.managedObjectContext) var viewContext
     
     var body: some View {
         VStack {
@@ -20,10 +19,10 @@ struct FavoritesMoviesView: View {
                 ForEach(self.FavoritesList.movies, id: \.imdbID) { movie in
                     HStack(alignment: .top) {
                         MovieCDRow(movie: movie.movie)
-                    }
+                    } 
                 }
             }
-        }
+        } .onAppear() { self.FavoritesList.loadMovies(tag: "movie") }
     }
 }
 

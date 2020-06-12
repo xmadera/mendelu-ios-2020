@@ -13,6 +13,7 @@ struct MoviesShowsShowsView: View {
     @State var searchText = ""
     var searchedTag = "series"
     @ObservedObject private var movieListVM = MovieListViewModel()
+    @ObservedObject private var favoritesListVM = FavoritesListViewModel()
     @State private var showingAlert = false
     
     var body: some View {
@@ -41,7 +42,7 @@ struct MoviesShowsShowsView: View {
                     }
                 }
             }
-        }
+        } .onAppear() { self.favoritesListVM.loadMovies(tag: "series") }
     }
 }
 

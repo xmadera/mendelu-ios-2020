@@ -12,40 +12,33 @@ import URLImage
 
 struct MoviesDetailView: View {
     @Environment(\.managedObjectContext) var viewContext
-    @State var movie: MovieViewModel
+    @State var movieId: String
     @State private var showingActionSheet = false
     @ObservedObject private var movieDetailVM = MovieDetailViewModel()
-    
+    @ObservedObject private var favoritesListVM = FavoritesListViewModel()
     
     var body: some View {
         VStack {
             VStack(alignment: .center) {
                 ZStack{
-                    URLImage(self.movie.poster.getImageUrl, delay: 0.25, content:  {
+                    URLImage((self.movieDetailVM.movie.poster.getImageUrl)!, delay: 0.25, content:  {
                         $0.image
                             .resizable()
                             .aspectRatio(contentMode: .fill)
-                            .frame(height: 250)
+                            .frame(height: 200)
                     })
                     
                     Rectangle()
                         .foregroundColor(.clear)
                         .background(LinearGradient(gradient: Gradient(colors: [.black, .clear]), startPoint: .top, endPoint: .bottom))
                         .cornerRadius(0)
-                        .frame(height: 250)
+                        .frame(height: 200)
                     
                     
                     Text(self.movieDetailVM.movie.plot)
                         .font(.body)
                         .foregroundColor(.white)
                         .multilineTextAlignment(.leading)
-                        .navigationBarItems(trailing:
-                            Button(action: {
-                                self.showingActionSheet = true
-                            }) {
-                                Image(systemName: "list.bullet")
-                            }
-                    )
                         .padding()
                         .background(Color("textDarkBackground"))
                         .cornerRadius(5)
@@ -58,9 +51,37 @@ struct MoviesDetailView: View {
                         .background(Color("textBlueBackground"))
                         .frame(height: 40)
                         .cornerRadius(20)
-                        .shadow(color: .gray, radius: 8)
                         .offset(y: 278)
-                }
+                    
+                    HStack {
+                        Text(self.movieDetailVM.movie.title)
+                            .foregroundColor(.white)
+                            .font(.system(size: 24, weight: .regular))
+                        
+                        Spacer()
+                        Button(action: {
+                            if !self.isInCoreData(id: self.movieDetailVM.movie.imdbID) {
+                                self.showingActionSheet = true;
+                            }
+                        }) {
+                            if !isInCoreData(id: self.movieDetailVM.movie.imdbID) {
+                                Image(systemName: "heart").font(.system(size: 24))
+                                    .foregroundColor(.white)
+                            } else {
+                                Image(systemName: "heart.fill").font(.system(size: 24))
+                                    .foregroundColor(.white)
+                            }
+                            
+                        }.alert(isPresented: $showingActionSheet) {
+                            Alert(title: Text("Are you sure you want to add this from your favorites?"), primaryButton: .default(Text("Add")) {
+                                MovieCD.create(context: self.viewContext, movie: self.movieDetailVM.movie)
+                                self.favoritesListVM.loadMovies(tag: self.movieDetailVM.movie.type)
+                                }, secondaryButton: .cancel())
+                        }
+                        
+                    }.padding()
+                        .padding(.top)
+                }.edgesIgnoringSafeArea(.top)
             }
             
             Spacer()
@@ -97,34 +118,28 @@ struct MoviesDetailView: View {
                 Text("Ratings")
                     .padding(.vertical)
                 
-//                HStack {
-//                    ForEach(self.movieDetailVM.movie.ratings) { rating in
-//                        VStack {
-//                            Text("\(rating.Source)")
-//                            Text("\(rating.Value)")
-//                        }
-//                    }
-//                }
+                //                HStack {
+                //                    ForEach(self.movieDetailVM.movie.ratings) { rating in
+                //                        VStack {
+                //                            Text("\(rating.Source)")
+                //                            Text("\(rating.Value)")
+                //                        }
+                //                    }
+                //                }
                 
             }.padding()
-                .actionSheet(isPresented: self.$showingActionSheet) {
-                    ActionSheet(title: Text("Options"), buttons: [.default(Text("Add to favorites"), action: { MovieCD.create(context: self.viewContext, movie: self.movie.movie) }), .cancel()])
-            }
-            .onAppear{
-                self.movieDetailVM.loadMovie(imdbID: self.movie.imdbID)
-            }
-            
-            
-            
-            
-        }.navigationBarTitle(Text(self.movieDetailVM.movie.title).foregroundColor(.white), displayMode: .large)
-            .edgesIgnoringSafeArea(.top)
-        
+        }
+        .onAppear{
+            self.movieDetailVM.loadMovie(imdbID: self.movieId)
+        }
+    }
+    func isInCoreData(id: String) -> Bool {
+        if self.favoritesListVM.movies.contains(where: { $0.imdbID == id }) { return true } else { return false }
     }
 }
 
-struct MoviesDetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        /*@START_MENU_TOKEN@*/Text("Hello, World!")/*@END_MENU_TOKEN@*/
-    }
-}
+//struct MoviesDetailView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        /*@START_MENU_TOKEN@*/Text("Hello, World!")/*@END_MENU_TOKEN@*/movieDetailVM
+//    }
+//}

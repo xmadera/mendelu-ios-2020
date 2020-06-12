@@ -35,18 +35,6 @@ class MovieListViewModel: ObservableObject {
     }
 }
 
-class FavoritesListViewModel: ObservableObject {
-    @Published var movies = [MovieCDViewModel]()
-    
-    init() {
-        loadMovies()
-    }
-    
-    func loadMovies() {
-        self.movies = CoreDataManager.shared.getMovies().map(MovieCDViewModel.init)
-    }
-}
-
 struct MovieViewModel {
     var movie: Movie
     
@@ -72,6 +60,19 @@ struct MovieViewModel {
     
     var poster: String {
         return self.movie.Poster
+    }
+}
+
+class FavoritesListViewModel: ObservableObject {
+    @Published var movies = [MovieCDViewModel]()
+    @Published var movie: MovieCD? = nil
+    
+    func loadMovies(tag: String) {
+        self.movies = CoreDataManager.shared.getMovies(tag: tag).map(MovieCDViewModel.init)
+    }
+    
+    func loadMovie(id: String) {
+        self.movie = CoreDataManager.shared.getMovie(tag: id)
     }
 }
 

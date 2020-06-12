@@ -19,30 +19,34 @@ class CoreDataManager {
         self.moc = moc
     }
     
-    func getMovies() -> [MovieCD] {
+    func getMovies(tag: String) -> [MovieCD] {
         
         var movies = [MovieCD]()
         
         let movieRequest: NSFetchRequest<MovieCD> = MovieCD.fetchRequest()
+        movieRequest.predicate = NSPredicate(format: "type == '\(tag)'")
         
         do  {
             movies = try self.moc.fetch(movieRequest)
         } catch let error as NSError {
             print(error)
         }
-        
         return movies
-        
     }
     
-    func removeMovie(at offsets: IndexSet) {
+    func getMovie(tag: String) -> MovieCD {
         
-        var movies = self.getMovies()
+        var movies = [MovieCD]()
         
-        for index in offsets {
-            let movie = movies[index]
-            moc.delete(movie)
+        let movieRequest: NSFetchRequest<MovieCD> = MovieCD.fetchRequest()
+        movieRequest.predicate = NSPredicate(format: "imdbID == '\(tag)'")
+        
+        do  {
+            movies = try self.moc.fetch(movieRequest)
+        } catch let error as NSError {
+            print(error)
         }
+        return movies[0]
     }
 }
 

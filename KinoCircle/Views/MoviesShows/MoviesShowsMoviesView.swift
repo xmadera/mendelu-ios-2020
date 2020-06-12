@@ -51,7 +51,7 @@ struct MoviesShowsMoviesView: View {
                     }
                 }
             }
-        }
+        } .onAppear() { self.favoritesListVM.loadMovies(tag: "movie") }
     }
     
     func isInCoreData(id: String) -> Bool {

@@ -12,75 +12,90 @@ import URLImage
 
 struct MoviesDetailCDView: View {
     @Environment(\.managedObjectContext) var viewContext
-    @State var movie: MovieCD
+    @State var movieId: String
     @State private var showingActionSheet = false
-    @ObservedObject private var movieDetailVM = MovieDetailViewModel()
-    
+    @State private var showingEditReview = false
+    @ObservedObject private var favoritesListVM = FavoritesListViewModel()
     
     var body: some View {
         VStack {
-            VStack(alignment: .center) {
+            VStack() {
                 ZStack{
-                    URLImage(self.movie.poster?.getImageUrl ?? URL(string: "")!, delay: 0.25, content:  {
-                        $0.image
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(height: 250)
-                    })
+                    if self.favoritesListVM.movie != nil {
+                        URLImage((self.favoritesListVM.movie!.poster!.getImageUrl)! , delay: 0.25, content:  {
+                            $0.image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(height: 200)
+                        })
+                    }
                     
                     Rectangle()
                         .foregroundColor(.clear)
                         .background(LinearGradient(gradient: Gradient(colors: [.black, .clear]), startPoint: .top, endPoint: .bottom))
                         .cornerRadius(0)
-                        .frame(height: 250)
+                        .frame(height: 200)
                     
                     
-                    Text(self.movieDetailVM.movie.plot)
+                    Text(self.favoritesListVM.movie?.plot ?? "")
                         .font(.body)
                         .foregroundColor(.white)
                         .multilineTextAlignment(.leading)
-                        .navigationBarItems(trailing:
-                            Button(action: {
-                                self.showingActionSheet = true
-                            }) {
-                                Image(systemName: "list.bullet")
-                            }
-                    )
                         .padding()
                         .background(Color("textDarkBackground"))
                         .cornerRadius(5)
                         .offset(y: 170)
                     
-                    Text(self.movieDetailVM.movie.genre)
+                    Text(self.favoritesListVM.movie?.genre ?? "")
                         .foregroundColor(.white)
                         .font(.system(size: 12, weight: .regular))
                         .padding()
                         .background(Color("textBlueBackground"))
                         .frame(height: 40)
                         .cornerRadius(20)
-                        .shadow(color: .gray, radius: 8)
                         .offset(y: 278)
-                }
+                    
+                    HStack {
+                        Text(self.favoritesListVM.movie?.title ?? "")
+                            .foregroundColor(.white)
+                            .font(.system(size: 24, weight: .regular))
+                        
+                        Spacer()
+                        
+                        Button(action: {
+                            self.showingActionSheet = true;
+                        }) {
+                            Image(systemName: "heart.fill").font(.system(size: 24))
+                                .foregroundColor(.white)
+                        } .alert(isPresented: $showingActionSheet) {
+                            Alert(title: Text("Are you sure you want to remove this from your favorites?"), message: Text("Your review will be lost"), primaryButton: .destructive(Text("Remove")) {
+                                MovieCD.delete(context: self.viewContext, movie: (self.favoritesListVM.movie!) as MovieCD)
+                                }, secondaryButton: .cancel())
+                        }
+                        
+                    }.padding()
+                        .padding(.top)
+                }.edgesIgnoringSafeArea(.top)
             }
             
             Spacer()
             
             VStack(alignment: .leading) {
-                Text("Director: \(self.movieDetailVM.movie.director)")
+                Text("Director: \(self.favoritesListVM.movie?.director ?? "")")
                     .font(.system(size: 14, weight: .bold))
                     .padding(.bottom)
                 
                 
                 Text("Writers:")
                     .font(.system(size: 14, weight: .regular))
-                Text(self.movieDetailVM.movie.writer)
+                Text(self.favoritesListVM.movie?.writer ?? "")
                     .font(.system(size: 12, weight: .regular))
                     .foregroundColor(.gray)
                     .padding(.vertical)
                 
                 Text("Actors:")
                     .font(.system(size: 14, weight: .regular))
-                Text(self.movieDetailVM.movie.actors)
+                Text(self.favoritesListVM.movie?.actors ?? "")
                     .font(.system(size: 12, weight: .regular))
                     .foregroundColor(.gray)
                     .padding(.vertical)
@@ -107,24 +122,27 @@ struct MoviesDetailCDView: View {
                 //                }
                 
             }.padding()
-                .actionSheet(isPresented: self.$showingActionSheet) {
-                    ActionSheet(title: Text("Options"), buttons: [.default(Text("Remove from favorites"), action: { }), .cancel()])
-            }
-        .onAppear{
-            self.movieDetailVM.loadMovie(imdbID: self.movie.imdbID ?? "")
-            }
             
             
             
-            
-        }.navigationBarTitle(Text(self.movieDetailVM.movie.title).foregroundColor(.white), displayMode: .large)
-            .edgesIgnoringSafeArea(.top)
+        }.navigationBarItems(trailing:
+            Button(action: {
+                self.showingEditReview = true
+            }) { Image(systemName: "list.bullet")
+            }.sheet(isPresented: $showingEditReview, content: { EditReviewView(showingEditReview: self.$showingEditReview) }))
+            .onAppear{
+                self.favoritesListVM.loadMovie(id: self.movieId)
+        }
         
+    }
+    
+    func isInCoreData(id: String) -> Bool {
+        if self.favoritesListVM.movies.contains(where: { $0.imdbID == id }) { return true } else { return false }
     }
 }
 
-struct MoviesDetailCDView_Previews: PreviewProvider {
-    static var previews: some View {
-        /*@START_MENU_TOKEN@*/Text("Hello, World!")/*@END_MENU_TOKEN@*/
-    }
-}
+//struct MoviesDetailCDView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        /*@START_MENU_TOKEN@*/Text("Hello, World!")/*@END_MENU_TOKEN@*/
+//    }
+//}

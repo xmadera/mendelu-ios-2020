@@ -12,9 +12,9 @@ struct MovieCDRow : View {
     var movie: MovieCD
     
     var body: some View {
-        NavigationLink(destination: MoviesDetailCDView(movie: movie)) {
+        NavigationLink(destination: MoviesDetailCDView(movieId: movie.imdbID ?? "")) {
             HStack(alignment: .top) {
-                URLImage(movie.poster!.getImageUrl, delay: 0.25, content:  {
+                URLImage((movie.poster?.getImageUrl)!, delay: 0.25, content:  {
                     $0.image
                         .resizable()
                         .frame(width: 100, height: 100)

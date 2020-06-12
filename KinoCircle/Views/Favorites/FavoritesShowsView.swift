@@ -10,8 +10,6 @@ import SwiftUI
 import URLImage
 
 struct FavoritesShowsView: View {
-    @Environment(\.managedObjectContext)
-    var viewContext
     @ObservedObject private var FavoritesList = FavoritesListViewModel()
     
     var body: some View {
@@ -21,9 +19,12 @@ struct FavoritesShowsView: View {
                     HStack(alignment: .top) {
                         MovieCDRow(movie: movie.movie)
                     }
-                }
+                } .onDelete(perform: delete(at:))
             }
-        }
+        } .onAppear() { self.FavoritesList.loadMovies(tag: "series") }
+    }
+    func delete(at offsets: IndexSet) {
+        self.FavoritesList.movies.remove(atOffsets: offsets)
     }
 }
 

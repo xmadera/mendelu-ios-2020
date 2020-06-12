@@ -36,59 +36,59 @@ struct DetailViewModel {
     }
     
     var imdbID: String {
-        return self.movie.imdbID!
+        return self.movie.imdbID ?? ""
     }
     
     var title: String {
-        return self.movie.Title!
+        return self.movie.Title ?? ""
     }
     
     var year: String {
-        return self.movie.Year!
+        return self.movie.Year ?? ""
     }
     
     var type: String {
-        return self.movie.Type!
+        return self.movie.Type ?? ""
     }
     
     var poster: String {
-        return self.movie.Poster!
+        return self.movie.Poster ?? ""
     }
     
     var rated: String {
-        return self.movie.Rated!
+        return self.movie.Rated ?? ""
     }
     
     var runtime: String {
-        return self.movie.Runtime!
+        return self.movie.Runtime ?? ""
     }
     
     var genre: String {
-        return self.movie.Genre!
+        return self.movie.Genre ?? ""
     }
     
     var director: String {
-        return self.movie.Director!
+        return self.movie.Director ?? ""
     }
     
     var writer: String {
-        return self.movie.Writer!
+        return self.movie.Writer ?? ""
     }
     
     var actors: String {
-        return self.movie.Actors!
+        return self.movie.Actors ?? ""
     }
     
     var plot: String {
-        return self.movie.Plot!
+        return self.movie.Plot ?? ""
     }
     
     var language: String {
-        return self.movie.Language!
+        return self.movie.Language ?? ""
     }
     
     var country: String {
-        return self.movie.Country!
+        return self.movie.Country ?? ""
     }
     
     var award: String {
@@ -96,35 +96,35 @@ struct DetailViewModel {
     }
     
     var ratings: [Rating] {
-        return self.movie.Ratings!
+        return self.movie.Ratings ?? []
     }
     
     var metascore: String {
-        return self.movie.Metascore!
+        return self.movie.Metascore ?? ""
     }
     
     var imdbRating: String {
-        return self.movie.imdbRating!
+        return self.movie.imdbRating ?? ""
     }
     
     var imdbVotes: String {
-        return self.movie.imdbVotes!
+        return self.movie.imdbVotes ?? ""
     }
     
     var DVD: String {
-        return self.movie.DVD!
+        return self.movie.DVD ?? ""
     }
     
     var boxOffice: String {
-        return self.movie.BoxOffice!
+        return self.movie.BoxOffice ?? ""
     }
     
     var production: String {
-        return self.movie.Production!
+        return self.movie.Production ?? ""
     }
     
     var website: String {
-        return self.movie.Website!
+        return self.movie.Website ?? ""
     }
     
 }
