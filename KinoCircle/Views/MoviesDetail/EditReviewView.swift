@@ -9,21 +9,16 @@
 import SwiftUI
 
 struct EditReviewView: View {
+    @ObservedObject private var favoritesListVM = FavoritesListViewModel()
     @Binding var showingEditReview: Bool
-    @State var text1: String = ""
-    @State var text2: String = ""
+    @Binding var review: String
+    @State var movieId: String
     
     var body: some View {
         NavigationView{
             VStack(alignment: .leading) {
-                Text("Rating")
-                TextField("5", text: $text1)
-                    .font(Font.system(size: 12, weight: .regular))
-                    .frame(width: 50)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                
                 Text("Review")
-                TextField("Write your review", text: $text2)
+                TextField("Write your review", text: $review)
                     .font(Font.system(size: 12, weight: .regular))
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                 
@@ -33,12 +28,13 @@ struct EditReviewView: View {
                 .navigationBarTitle(Text("Add review"), displayMode: .inline)
                 .navigationBarItems(leading:
                     Button(action: {
-                        // self.close = true
+                        self.showingEditReview = false
                     }) {
                         Text("Cancel")
                     }, trailing:
                     Button(action: {
-                        // self.save = true
+                        self.favoritesListVM.updateMovie(id: self.movieId, text: self.review)
+                        self.showingEditReview = false
                     }) {
                         Text("Save")
                     }

@@ -44,6 +44,11 @@ struct ContentView: View {
         }
         
     }
+    init() {
+        UINavigationBar.appearance().largeTitleTextAttributes = [
+        .foregroundColor: UIColor.white,
+        .font : UIFont(name:"Optima-Bold", size: 20)!]
+    }
 }
 
 struct ContentView_Previews: PreviewProvider {

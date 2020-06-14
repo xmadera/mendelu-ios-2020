@@ -22,7 +22,7 @@ struct MoviesShowsMoviesView: View {
     
     var body: some View {
         VStack {
-            SearchBar(text: $searchText)
+            SearchBarUI(text: $searchText)
                 .padding(0.0)
             Button(action: {
                 self.movieListVM.loadMovies(paramTitle: self.searchText, tag: self.searchedTag)
@@ -43,25 +43,16 @@ struct MoviesShowsMoviesView: View {
             VStack {
                 List {
                     ForEach(self.movieListVM.movies, id: \.imdbID) { movie in
-                        Group {
-                            if !self.isInCoreData(id: movie.imdbID) {
-                                MovieRow(movie: movie)
-                            }
-                        }
+                        MovieRowUI(title: movie.title, poster: movie.poster, year: movie.year, imdbID: movie.imdbID, tag: movie.type)
                     }
                 }
             }
         } .onAppear() { self.favoritesListVM.loadMovies(tag: "movie") }
     }
-    
-    func isInCoreData(id: String) -> Bool {
-        if self.favoritesListVM.movies.contains(where: { $0.imdbID == id }) { return true } else { return false }
-    }
 }
 
-struct MoviesShowsMoviesView_Previews: PreviewProvider {
-    static var previews: some View {
-        MoviesShowsMoviesView()
-    }
-    
-}
+//struct MoviesShowsMoviesView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MoviesShowsMoviesView()
+//    }
+//}

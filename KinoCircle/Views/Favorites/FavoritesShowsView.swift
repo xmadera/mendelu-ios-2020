@@ -11,20 +11,18 @@ import URLImage
 
 struct FavoritesShowsView: View {
     @ObservedObject private var FavoritesList = FavoritesListViewModel()
+    @Environment(\.managedObjectContext) var viewContext
     
     var body: some View {
         VStack {
             List {
                 ForEach(self.FavoritesList.movies, id: \.imdbID) { movie in
                     HStack(alignment: .top) {
-                        MovieCDRow(movie: movie.movie)
+                        MovieRowUI(title: movie.title, poster: movie.poster, year: movie.year, imdbID: movie.imdbID, tag: movie.type)
                     }
-                } .onDelete(perform: delete(at:))
+                }
             }
         } .onAppear() { self.FavoritesList.loadMovies(tag: "series") }
-    }
-    func delete(at offsets: IndexSet) {
-        self.FavoritesList.movies.remove(atOffsets: offsets)
     }
 }
 

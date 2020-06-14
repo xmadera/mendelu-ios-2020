@@ -7,12 +7,13 @@
         <attribute name="imdbID" optional="YES" attributeType="String"/>
         <attribute name="plot" optional="YES" attributeType="String"/>
         <attribute name="poster" optional="YES" attributeType="String"/>
+        <attribute name="review" optional="YES" attributeType="String"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <attribute name="type" optional="YES" attributeType="String"/>
         <attribute name="writer" optional="YES" attributeType="String"/>
         <attribute name="year" optional="YES" attributeType="String"/>
     </entity>
     <elements>
-        <element name="MovieCD" positionX="-63" positionY="-18" width="128" height="193"/>
+        <element name="MovieCD" positionX="-63" positionY="-18" width="128" height="208"/>
     </elements>
 </model>

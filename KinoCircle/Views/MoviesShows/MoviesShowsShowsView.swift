@@ -16,9 +16,13 @@ struct MoviesShowsShowsView: View {
     @ObservedObject private var favoritesListVM = FavoritesListViewModel()
     @State private var showingAlert = false
     
+    init() {
+        UITableView.appearance().showsVerticalScrollIndicator = false
+    }
+    
     var body: some View {
         VStack {
-            SearchBar(text: $searchText)
+            SearchBarUI(text: $searchText)
                 .padding(0.0)
             Button(action: {
                 self.movieListVM.loadMovies(paramTitle: self.searchText, tag: self.searchedTag)
@@ -35,10 +39,11 @@ struct MoviesShowsShowsView: View {
             .alert(isPresented: $showingAlert) {
                 Alert(title: Text(self.movieListVM.getError() ?? "Unknown error"), message: Text("Try specifying your seach"), dismissButton: .default(Text("Close")))
             }
+            
             VStack {
                 List {
                     ForEach(self.movieListVM.movies, id: \.imdbID) { movie in
-                        MovieRow(movie: movie)
+                        MovieRowUI(title: movie.title, poster: movie.poster, year: movie.year, imdbID: movie.imdbID, tag: movie.type)
                     }
                 }
             }
@@ -46,8 +51,8 @@ struct MoviesShowsShowsView: View {
     }
 }
 
-struct MoviesShowsShowsView_Previews: PreviewProvider {
-    static var previews: some View {
-        MoviesShowsShowsView()
-    }
-}
+//struct MoviesShowsShowsView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MoviesShowsShowsView()
+//    }
+//}

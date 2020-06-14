@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct SearchBar: UIViewRepresentable {
+struct SearchBarUI: UIViewRepresentable {
     
     @Binding var text: String
     
@@ -25,11 +25,11 @@ struct SearchBar: UIViewRepresentable {
         }
     }
     
-    func makeCoordinator() -> SearchBar.Coordinator {
+    func makeCoordinator() -> SearchBarUI.Coordinator {
         return Coordinator(text: $text)
     }
     
-    func makeUIView(context: UIViewRepresentableContext<SearchBar>) -> UISearchBar {
+    func makeUIView(context: UIViewRepresentableContext<SearchBarUI>) -> UISearchBar {
         let searchBar = UISearchBar(frame: .zero)
         searchBar.delegate = context.coordinator
         searchBar.searchBarStyle = .minimal
@@ -38,7 +38,7 @@ struct SearchBar: UIViewRepresentable {
         return searchBar
     }
     
-    func updateUIView(_ uiView: UISearchBar, context: UIViewRepresentableContext<SearchBar>) {
+    func updateUIView(_ uiView: UISearchBar, context: UIViewRepresentableContext<SearchBarUI>) {
         uiView.text = text
     }
 }

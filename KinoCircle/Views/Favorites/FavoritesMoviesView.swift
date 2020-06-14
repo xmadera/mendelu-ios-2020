@@ -18,7 +18,7 @@ struct FavoritesMoviesView: View {
             List {
                 ForEach(self.FavoritesList.movies, id: \.imdbID) { movie in
                     HStack(alignment: .top) {
-                        MovieCDRow(movie: movie.movie)
+                        MovieRowUI(title: movie.title, poster: movie.poster, year: movie.year, imdbID: movie.imdbID, tag: movie.type)
                     } 
                 }
             }
