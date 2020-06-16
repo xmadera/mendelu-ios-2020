@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct EditReviewView: View {
-    @ObservedObject private var favoritesListVM = FavoritesListViewModel()
+    @ObservedObject private var favoritesDetailVM = FavoritesDetailViewModel()
     @Binding var showingEditReview: Bool
     @Binding var review: String
     @State var movieId: String
@@ -33,7 +33,7 @@ struct EditReviewView: View {
                         Text("Cancel")
                     }, trailing:
                     Button(action: {
-                        self.favoritesListVM.updateMovie(id: self.movieId, text: self.review)
+                        self.favoritesDetailVM.updateMovie(id: self.movieId, text: self.review)
                         self.showingEditReview = false
                     }) {
                         Text("Save")

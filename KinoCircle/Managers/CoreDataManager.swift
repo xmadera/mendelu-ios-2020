@@ -19,7 +19,7 @@ class CoreDataManager {
         self.moc = moc
     }
     
-    func createMovie(imdbID: String, title: String, type: String, poster: String, year: String, actors: String, director: String, plot: String, genre: String) {
+    func createMovie(imdbID: String, title: String, type: String, poster: String, year: String, actors: String, director: String, plot: String, genre: String, rating: [Rating]) {
         let newMovieCD = MovieCD(context: self.moc)
         newMovieCD.imdbID = imdbID
         newMovieCD.title = title
@@ -31,6 +31,7 @@ class CoreDataManager {
         newMovieCD.plot = plot
         newMovieCD.genre = genre
         newMovieCD.review = ""
+//        newMovieCD.rating = rating as NSSet
         do{
             try self.moc.save()
         } catch {
@@ -40,16 +41,14 @@ class CoreDataManager {
     
     func deleteMovie(movie: MovieCD){
         do{
-            try self.moc.delete(movie)
-        } catch {
-            print(error)
+            self.moc.delete(movie)
         }
     }
     
     func updateMovie(id: String, text: String){
         let movie = self.getMovie(id: id)
         
-        movie.review = text
+        movie?.review = text
         
         do{
             try self.moc.save()
@@ -57,8 +56,6 @@ class CoreDataManager {
             print(error)
         }
     }
-    
-    
     
     func getMovies(tag: String) -> [MovieCD] {
         
@@ -75,7 +72,7 @@ class CoreDataManager {
         return movies
     }
     
-    func getMovie(id: String) -> MovieCD {
+    func getMovie(id: String) -> MovieCD? {
         
         var movies = [MovieCD]()
         
@@ -87,11 +84,16 @@ class CoreDataManager {
         } catch let error as NSError {
             print(error)
         }
-        return movies[0]
+        if !movies.isEmpty {
+            return movies[0]
+        } else {
+            return nil
+        }
     }
     
     func isInCoreData(tag: String, id: String) -> Bool {
         return self.getMovies(tag: tag).contains(where: { $0.imdbID == id })
     }
+    
 }
 

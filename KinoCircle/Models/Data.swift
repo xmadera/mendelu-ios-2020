@@ -23,7 +23,7 @@ struct ResponseList: Codable {
     let Error: String?
 }
 
-struct Rating: Codable {
+struct Rating: Codable, Hashable {
     let Source: String
     let Value: String
 }

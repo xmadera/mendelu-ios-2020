@@ -13,11 +13,15 @@ class MainWebservice {
     func getMovies(paramTitle: String, tag: String, completion: @escaping (ResponseList?) -> ()) {
             
         var myUrl = "https://movie-database-imdb-alternative.p.rapidapi.com/?r=json"
+        
+        let paramTitle = paramTitle.trimmingCharacters(in: .whitespacesAndNewlines)
+        let escapedParamTitle = paramTitle.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed) ?? ""
                 
         myUrl += "&type=" + tag
-        myUrl += "&s=" + paramTitle.trimmingCharacters(in: .whitespacesAndNewlines)
+        myUrl += "&s=" + escapedParamTitle
                         
         guard let url = URL(string: myUrl) else { fatalError("Invalid API URL") }
+        
         
         let headers = [
             "x-rapidapi-host": "movie-database-imdb-alternative.p.rapidapi.com",

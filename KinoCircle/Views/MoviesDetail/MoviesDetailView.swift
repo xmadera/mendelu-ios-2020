@@ -16,7 +16,7 @@ struct MoviesDetailView: View {
     var body: some View {
         Group {
             if self.movieDetailVM.movie.imdbID == self.movieId {
-                MovieDetailUI(ActiveAlert: .notInCore, imdbID: self.movieDetailVM.movie.imdbID, title: self.movieDetailVM.movie.title, poster: self.movieDetailVM.movie.poster, genre: self.movieDetailVM.movie.genre, plot: self.movieDetailVM.movie.plot, actors: self.movieDetailVM.movie.actors, director: self.movieDetailVM.movie.director, type: self.movieDetailVM.movie.type, year: self.movieDetailVM.movie.year, review: "")
+                MovieDetailUI(ActiveAlert: .notInCore, imdbID: self.movieDetailVM.movie.imdbID, title: self.movieDetailVM.movie.title, poster: self.movieDetailVM.movie.poster, genre: self.movieDetailVM.movie.genre, plot: self.movieDetailVM.movie.plot, actors: self.movieDetailVM.movie.actors, director: self.movieDetailVM.movie.director, type: self.movieDetailVM.movie.type, year: self.movieDetailVM.movie.year, review: "", ratings: self.movieDetailVM.movie.ratings)
             } else {
                 Text("Loading..")
                     .font(.title)

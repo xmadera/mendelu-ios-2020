@@ -12,6 +12,7 @@ import URLImage
 struct FavoritesMoviesView: View {
     @ObservedObject private var FavoritesList = FavoritesListViewModel()
     @Environment(\.managedObjectContext) var viewContext
+    @State var searchedTag = "movie"
     
     var body: some View {
         VStack {
@@ -22,7 +23,7 @@ struct FavoritesMoviesView: View {
                     } 
                 }
             }
-        } .onAppear() { self.FavoritesList.loadMovies(tag: "movie") }
+        } .onAppear() { self.FavoritesList.loadMovies(tag: self.searchedTag) }
     }
 }
 

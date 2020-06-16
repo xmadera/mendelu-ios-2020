@@ -36,19 +36,19 @@ struct DetailViewModel {
     }
     
     var imdbID: String {
-        return self.movie.imdbID ?? ""
+        return self.movie.imdbID!
     }
     
     var title: String {
-        return self.movie.Title ?? ""
+        return self.movie.Title!
     }
     
     var year: String {
-        return self.movie.Year ?? ""
+        return self.movie.Year!
     }
     
     var type: String {
-        return self.movie.Type ?? ""
+        return self.movie.Type!
     }
     
     var poster: String {

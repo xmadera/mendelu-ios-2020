@@ -14,6 +14,7 @@ enum ActiveAlert {
 }
 
 struct MovieDetailUI: View {
+    @ObservedObject private var favoritesDetailVM = FavoritesDetailViewModel()
     @ObservedObject private var favoritesListVM = FavoritesListViewModel()
     @State private var showAlert = false
     @State private var showingEditReview = false
@@ -28,6 +29,7 @@ struct MovieDetailUI: View {
     @State var type: String
     @State var year: String
     @State var review: String
+    @State var ratings: [Rating]
     
     var body: some View {
         ZStack {
@@ -84,7 +86,7 @@ struct MovieDetailUI: View {
                         
                         Divider()
                         
-                        if self.favoritesListVM.isInCoreData(tag: self.type, id: self.imdbID) {
+                        if CoreDataManager.shared.isInCoreData(tag: self.type, id: self.imdbID) {
                             
                             VStack(alignment: .leading) {
                                 HStack {
@@ -102,11 +104,12 @@ struct MovieDetailUI: View {
                                                 .stroke(Color.gray, lineWidth: 1)
                                         )
                                     }.padding(.leading, 4)
-                                        .sheet(isPresented: $showingEditReview, onDismiss: {self.favoritesListVM.loadMovie(id: self.imdbID)}, content: { EditReviewView(showingEditReview: self.$showingEditReview, review: self.$review, movieId: self.imdbID) })
+                                        .sheet(isPresented: $showingEditReview, onDismiss: {self.favoritesDetailVM.loadMovie(id: self.imdbID)}, content: { EditReviewView(showingEditReview: self.$showingEditReview, review: self.$review, movieId: self.imdbID) })
                                 }.padding(.bottom)
                                 Text(self.review)
                                     .font(.system(size: 12, weight: .regular))
                                     .foregroundColor(.gray)
+                                    .multilineTextAlignment(.leading)
                                     .padding(.bottom)
                             }.padding(.horizontal)
                         }
@@ -117,22 +120,19 @@ struct MovieDetailUI: View {
                                 .font(.system(size: 14, weight: .regular))
                                 .padding(.bottom)
                             HStack {
-                                VStack {
-                                    Text("Metascore")
-                                    Text("75")
-                                }.foregroundColor(.white)
-                                    .font(.system(size: 12, weight: .regular))
-                                    .padding(8)
-                                    .background(Color("textBlueBackground"))
-                                    .padding(.trailing, 8)
-                                VStack {
-                                    Text("IMDb")
-                                    Text("8.0")
-                                }.foregroundColor(.white)
-                                    .font(.system(size: 12, weight: .regular))
-                                    .padding(8)
-                                    .background(Color("textBlueBackground"))
-                                    .padding(.trailing, 8)
+                                ForEach(self.ratings, id: \.Source) { rating in
+                                    VStack {
+                                        Text(rating.Source)
+                                            .multilineTextAlignment(.center)
+                                        Text(rating.Value)
+                                            .multilineTextAlignment(.center)
+                                            .padding(.bottom, 4.0)
+                                    }.foregroundColor(.white)
+                                        .font(.system(size: 12, weight: .regular))
+                                        .padding(8)
+                                        .background(Color("textBlueBackground"))
+                                        .padding(.trailing, 8)
+                                }
                                 //                                VStack {
                                 //                                    Text("My rating")
                                 //                                    Text("9.0")
@@ -158,13 +158,13 @@ struct MovieDetailUI: View {
         .navigationBarTitle(Text(self.title), displayMode: .large)
         .navigationBarItems(trailing: Button(action: {
             self.showAlert = true
-            if !self.favoritesListVM.isInCoreData(tag: self.type, id: self.imdbID) {
+            if !CoreDataManager.shared.isInCoreData(tag: self.type, id: self.imdbID) {
                 self.ActiveAlert = .notInCore
             } else {
                 self.ActiveAlert = .inCore
             }
         }) {
-            if self.favoritesListVM.isInCoreData(tag: self.type, id: self.imdbID) {
+            if CoreDataManager.shared.isInCoreData(tag: self.type, id: self.imdbID) {
                 Image(systemName: "heart.fill").font(.system(size: 24))
                     .foregroundColor(.red)
             } else {
@@ -175,9 +175,9 @@ struct MovieDetailUI: View {
         }.alert(isPresented: self.$showAlert) {
             switch ActiveAlert {
             case .notInCore:
-                return Alert(title: Text("Are you sure you want to add this to your favorites?"), primaryButton: .default(Text("Add")) { self.favoritesListVM.createMovie(id: self.imdbID, title: self.title, type: self.type, poster: self.poster, year: self.year, actors: self.actors, director: self.director, plot: self.plot, genre: self.genre); self.favoritesListVM.loadMovies(tag: self.type) }, secondaryButton: .cancel())
+                return Alert(title: Text("Are you sure you want to add this to your favorites?"), primaryButton: .default(Text("Add")) { self.favoritesDetailVM.createMovie(id: self.imdbID, title: self.title, type: self.type, poster: self.poster, year: self.year, actors: self.actors, director: self.director, plot: self.plot, genre: self.genre, rating: self.ratings); self.favoritesListVM.loadMovies(tag: self.type) }, secondaryButton: .cancel())
             case .inCore:
-                return Alert(title: Text("Are you sure you want to remove this from your favorites?"), message: Text("Your review will be lost"), primaryButton: .destructive(Text("Remove")) { self.favoritesListVM.loadMovie(id: self.imdbID); self.favoritesListVM.deleteMovie(movie: (self.favoritesListVM.movie!) as MovieCD) }, secondaryButton: .cancel())
+                return Alert(title: Text("Are you sure you want to remove this from your favorites?"), message: Text("Your review will be lost"), primaryButton: .destructive(Text("Remove")) { self.favoritesDetailVM.loadMovie(id: self.imdbID); self.favoritesDetailVM.deleteMovie(movie: (self.favoritesDetailVM.movie!) as MovieCD) }, secondaryButton: .cancel())
             }
         })
     }

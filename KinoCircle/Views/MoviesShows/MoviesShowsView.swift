@@ -11,6 +11,8 @@ import SwiftUI
 struct MoviesShowsView: View {
     @State private var selectorIndex = 0
     @State private var tabs = ["Movies","Shows"]
+    @ObservedObject private var movieListVM = MovieListViewModel()
+    @ObservedObject private var favoritesListVM = FavoritesListViewModel()
     
     var body: some View {
         VStack {

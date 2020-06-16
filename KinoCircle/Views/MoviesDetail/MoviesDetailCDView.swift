@@ -11,12 +11,12 @@ import URLImage
 
 struct MoviesDetailCDView: View {
     @State var movieId: String
-    @ObservedObject private var favoritesListVM = FavoritesListViewModel()
+    @ObservedObject private var favoritesDetailVM = FavoritesDetailViewModel()
     
     var body: some View {
         Group {
-            if self.favoritesListVM.movie?.imdbID == self.movieId {
-                MovieDetailUI(ActiveAlert: .inCore, imdbID: self.favoritesListVM.movie?.imdbID ?? "", title: self.favoritesListVM.movie?.title ?? "", poster: self.favoritesListVM.movie?.poster ?? "", genre: self.favoritesListVM.movie?.genre ?? "", plot: self.favoritesListVM.movie?.plot ?? "", actors: self.favoritesListVM.movie?.actors ?? "", director: self.favoritesListVM.movie?.director ?? "", type: self.favoritesListVM.movie?.type ?? "", year: self.favoritesListVM.movie?.year ?? "", review: self.favoritesListVM.movie?.review ?? "")
+            if self.favoritesDetailVM.movie?.imdbID == self.movieId {
+                MovieDetailUI(ActiveAlert: .inCore, imdbID: self.favoritesDetailVM.movie?.imdbID ?? "", title: self.favoritesDetailVM.movie?.title ?? "", poster: self.favoritesDetailVM.movie?.poster ?? "", genre: self.favoritesDetailVM.movie?.genre ?? "", plot: self.favoritesDetailVM.movie?.plot ?? "", actors: self.favoritesDetailVM.movie?.actors ?? "", director: self.favoritesDetailVM.movie?.director ?? "", type: self.favoritesDetailVM.movie?.type ?? "", year: self.favoritesDetailVM.movie?.year ?? "", review: self.favoritesDetailVM.movie?.review ?? "", ratings: [])
             } else {
                 Text("Loading..")
                     .font(.title)
@@ -24,7 +24,7 @@ struct MoviesDetailCDView: View {
                     .multilineTextAlignment(.center)
             }
         }.onAppear{ DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.favoritesListVM.loadMovie(id: self.movieId)
+            self.favoritesDetailVM.loadMovie(id: self.movieId)
             }
         }
     }

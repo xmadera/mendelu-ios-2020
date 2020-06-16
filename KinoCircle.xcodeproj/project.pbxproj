@@ -29,6 +29,8 @@
 		3DBE520C248AC047009B1B11 /* FavoritesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DBE520B248AC047009B1B11 /* FavoritesView.swift */; };
 		3DBE520E248AC04D009B1B11 /* MoviesShowsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DBE520D248AC04D009B1B11 /* MoviesShowsView.swift */; };
 		3DBE5211248AC24C009B1B11 /* MovieRowUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DBE5210248AC24C009B1B11 /* MovieRowUI.swift */; };
+		3DD958BB2498E8EE009E9A57 /* FavoritesListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD958BA2498E8EE009E9A57 /* FavoritesListViewModel.swift */; };
+		3DD958BD2498E90D009E9A57 /* FavoritesDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD958BC2498E90C009E9A57 /* FavoritesDetailViewModel.swift */; };
 		68ED2EAD78D0042C9E191DE4 /* Pods_KinoCircle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FA0A8AF595DA01EF7F0DF0 /* Pods_KinoCircle.framework */; };
 		C3264A6C24898123009CEA88 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3264A6B24898123009CEA88 /* String+Extension.swift */; };
 		C358AD752489753500E4DF09 /* SearchBarUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = C358AD742489753500E4DF09 /* SearchBarUI.swift */; };
@@ -62,6 +64,8 @@
 		3DBE520B248AC047009B1B11 /* FavoritesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoritesView.swift; sourceTree = "<group>"; };
 		3DBE520D248AC04D009B1B11 /* MoviesShowsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoviesShowsView.swift; sourceTree = "<group>"; };
 		3DBE5210248AC24C009B1B11 /* MovieRowUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieRowUI.swift; sourceTree = "<group>"; };
+		3DD958BA2498E8EE009E9A57 /* FavoritesListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesListViewModel.swift; sourceTree = "<group>"; };
+		3DD958BC2498E90C009E9A57 /* FavoritesDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesDetailViewModel.swift; sourceTree = "<group>"; };
 		B5C7820BB5A992039B1787CB /* Pods-KinoCircle.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KinoCircle.debug.xcconfig"; path = "Target Support Files/Pods-KinoCircle/Pods-KinoCircle.debug.xcconfig"; sourceTree = "<group>"; };
 		BB93A29F2D0300ECFE37D428 /* Pods-KinoCircle.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KinoCircle.release.xcconfig"; path = "Target Support Files/Pods-KinoCircle/Pods-KinoCircle.release.xcconfig"; sourceTree = "<group>"; };
 		C3264A6B24898123009CEA88 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
@@ -149,6 +153,8 @@
 			children = (
 				3D48E311247EE24E00BF6A49 /* MovieDetailViewModel.swift */,
 				3DAC815024686548009333CF /* MovieListViewModel.swift */,
+				3DD958BA2498E8EE009E9A57 /* FavoritesListViewModel.swift */,
+				3DD958BC2498E90C009E9A57 /* FavoritesDetailViewModel.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -372,11 +378,13 @@
 				C358AD77248979D800E4DF09 /* FavoritesMoviesView.swift in Sources */,
 				3DAC814E24686413009333CF /* MainWebservice.swift in Sources */,
 				3DBE520C248AC047009B1B11 /* FavoritesView.swift in Sources */,
+				3DD958BB2498E8EE009E9A57 /* FavoritesListViewModel.swift in Sources */,
 				C3264A6C24898123009CEA88 /* String+Extension.swift in Sources */,
 				3D11836D244F5A79005F6FB6 /* SceneDelegate.swift in Sources */,
 				3D9E9333248AC9DA003FC806 /* CoreDataManager.swift in Sources */,
 				3DBE520E248AC04D009B1B11 /* MoviesShowsView.swift in Sources */,
 				3D118372244F5A79005F6FB6 /* ContentView.swift in Sources */,
+				3DD958BD2498E90D009E9A57 /* FavoritesDetailViewModel.swift in Sources */,
 				3D9635CC249693C20033F97F /* MovieDetailUI.swift in Sources */,
 				C358AD752489753500E4DF09 /* SearchBarUI.swift in Sources */,
 				3D9E9335248AD9A9003FC806 /* NSManagedObjectContext+Extension.swift in Sources */,

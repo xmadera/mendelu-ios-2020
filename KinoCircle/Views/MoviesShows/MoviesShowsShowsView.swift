@@ -13,7 +13,6 @@ struct MoviesShowsShowsView: View {
     @State var searchText = ""
     var searchedTag = "series"
     @ObservedObject private var movieListVM = MovieListViewModel()
-    @ObservedObject private var favoritesListVM = FavoritesListViewModel()
     @State private var showingAlert = false
     
     init() {
@@ -37,7 +36,7 @@ struct MoviesShowsShowsView: View {
             }
             .disabled(self.searchText.isEmpty)
             .alert(isPresented: $showingAlert) {
-                Alert(title: Text(self.movieListVM.getError() ?? "Unknown error"), message: Text("Try specifying your seach"), dismissButton: .default(Text("Close")))
+                Alert(title: Text(self.movieListVM.error ?? "Unknown error"), message: Text("Try specifying your seach"), dismissButton: .default(Text("Close")))
             }
             
             VStack {
@@ -47,7 +46,7 @@ struct MoviesShowsShowsView: View {
                     }
                 }
             }
-        } .onAppear() { self.favoritesListVM.loadMovies(tag: "series") }
+        }.onAppear() { self.movieListVM.loadMovies(paramTitle: self.searchText, tag: self.searchedTag)}
     }
 }
 

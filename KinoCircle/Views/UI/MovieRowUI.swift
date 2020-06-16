@@ -20,7 +20,7 @@ struct MovieRowUI : View {
     var body: some View {
         NavigationLink(destination: {
             VStack{
-                if !self.favoritesListVM.isInCoreData(tag: self.tag, id: self.imdbID) {
+                if !CoreDataManager.shared.isInCoreData(tag: self.tag, id: self.imdbID) {
                     MoviesDetailView(movieId: self.imdbID)
                 } else {
                     MoviesDetailCDView(movieId: self.imdbID)
@@ -38,11 +38,15 @@ struct MovieRowUI : View {
                     Text(year).font(.subheadline)
                 }
                 Spacer()
-                if !self.favoritesListVM.isInCoreData(tag: self.tag, id: self.imdbID) {
-                    Image(systemName: "heart").font(.system(size: 16))
+                if !CoreDataManager.shared.isInCoreData(tag: self.tag, id: self.imdbID) {
+                    Image(systemName: "heart")
+                        .padding(.top, 8)
+                        .font(.system(size: 16))
                         .foregroundColor(.red)
                 } else {
-                    Image(systemName: "heart.fill").font(.system(size: 16))
+                    Image(systemName: "heart.fill")
+                        .padding(.top, 8)
+                        .font(.system(size: 16))
                         .foregroundColor(.red)
                 }
             }.frame(height: 100)

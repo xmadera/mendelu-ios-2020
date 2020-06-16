@@ -12,8 +12,20 @@
         <attribute name="type" optional="YES" attributeType="String"/>
         <attribute name="writer" optional="YES" attributeType="String"/>
         <attribute name="year" optional="YES" attributeType="String"/>
+        <relationship name="ratings" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RatingCD" inverseName="origin" inverseEntity="RatingCD"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="imdbID"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="RatingCD" representedClassName="RatingCD" syncable="YES" codeGenerationType="class">
+        <attribute name="source" optional="YES" attributeType="String"/>
+        <attribute name="value" optional="YES" attributeType="String"/>
+        <relationship name="origin" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MovieCD" inverseName="ratings" inverseEntity="MovieCD"/>
     </entity>
     <elements>
-        <element name="MovieCD" positionX="-63" positionY="-18" width="128" height="208"/>
+        <element name="MovieCD" positionX="-63" positionY="-18" width="128" height="223"/>
+        <element name="RatingCD" positionX="-63" positionY="63" width="128" height="88"/>
     </elements>
 </model>
